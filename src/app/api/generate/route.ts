@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+function getAI() {
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+}
 
 function calculateAge(birthDate: string): number {
   const birth = new Date(birthDate);
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Supabaseから子供情報を取得
-    const { data: child, error } = await supabase
+    const { data: child, error } = await getSupabase()
       .from("children")
       .select("*")
       .eq("id", childId)
@@ -65,7 +67,7 @@ ${keywords}
 出力例:
 ["文章1", "文章2", "文章3", "文章4", "文章5"]`;
 
-    const response = await ai.models.generateContent({
+    const response = await getAI().models.generateContent({
       model: "gemini-2.0-flash",
       contents: prompt,
     });

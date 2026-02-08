@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import type { Child } from "@/lib/types";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchChildren() {
-      const { data } = await supabase
+      const { data } = await getSupabase()
         .from("children")
         .select("*")
         .order("birth_date", { ascending: true });
