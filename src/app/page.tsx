@@ -58,17 +58,17 @@ export default function Home() {
   const selectedChildData = children.find((c) => c.id === selectedChild);
 
   return (
-    <div className="min-h-screen bg-amber-50">
-      <div className="mx-auto max-w-md px-4 py-8">
+    <div className="min-h-dvh bg-amber-50">
+      <div className="mx-auto max-w-lg px-4 pb-12 pt-6 sm:px-6 sm:py-10">
         {/* Header */}
-        <h1 className="mb-6 text-center text-2xl font-bold text-amber-900">
+        <h1 className="mb-5 text-center text-xl font-bold text-amber-900 sm:text-2xl">
           連絡帳ボット
         </h1>
 
         {/* Child Selector */}
-        <div className="mb-6">
+        <div className="mb-5">
           <p className="mb-2 text-sm font-medium text-amber-800">お子さんを選択</p>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             {children.map((child) => (
               <button
                 key={child.id}
@@ -77,28 +77,28 @@ export default function Home() {
                   setMessages([]);
                   setCopiedIndex(null);
                 }}
-                className={`flex-1 rounded-xl py-3 text-lg font-bold transition-all ${
+                className={`flex-1 rounded-xl py-3.5 text-base font-bold transition-all active:scale-95 sm:text-lg ${
                   selectedChild === child.id
                     ? "bg-amber-500 text-white shadow-md"
-                    : "bg-white text-amber-700 border-2 border-amber-200 hover:border-amber-400"
+                    : "bg-white text-amber-700 border-2 border-amber-200"
                 }`}
               >
                 {child.name}
-                <span className="ml-1 text-sm font-normal">
+                <span className="ml-1 text-xs font-normal sm:text-sm">
                   ({child.name_reading})
                 </span>
               </button>
             ))}
           </div>
           {selectedChildData && (
-            <p className="mt-2 text-center text-xs text-amber-600">
+            <p className="mt-2 text-center text-xs text-amber-600 leading-relaxed">
               {selectedChildData.birth_order} ・ {selectedChildData.personality}
             </p>
           )}
         </div>
 
         {/* Keywords Input */}
-        <div className="mb-6">
+        <div className="mb-5">
           <label
             htmlFor="keywords"
             className="mb-2 block text-sm font-medium text-amber-800"
@@ -109,9 +109,9 @@ export default function Home() {
             id="keywords"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
-            placeholder="例: 公園で遊んだ、ご飯よく食べた、夜ぐっすり寝た"
+            placeholder={"例: 公園で遊んだ、ご飯よく食べた\n夜ぐっすり寝た"}
             rows={3}
-            className="w-full rounded-xl border-2 border-amber-200 bg-white p-4 text-base text-gray-800 placeholder:text-amber-300 focus:border-amber-500 focus:outline-none"
+            className="w-full rounded-xl border-2 border-amber-200 bg-white p-3.5 text-base leading-relaxed text-gray-800 placeholder:text-amber-300 focus:border-amber-500 focus:outline-none sm:p-4"
           />
         </div>
 
@@ -119,7 +119,7 @@ export default function Home() {
         <button
           onClick={handleGenerate}
           disabled={loading || !keywords.trim()}
-          className="mb-8 w-full rounded-xl bg-amber-600 py-4 text-lg font-bold text-white shadow-md transition-all hover:bg-amber-700 disabled:bg-amber-300 disabled:cursor-not-allowed"
+          className="mb-6 w-full rounded-xl bg-amber-600 py-4 text-base font-bold text-white shadow-md transition-all active:scale-[0.98] disabled:bg-amber-300 disabled:cursor-not-allowed sm:text-lg"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -155,15 +155,23 @@ export default function Home() {
             <p className="mb-3 text-sm font-medium text-amber-800">
               生成結果（タップでコピー）
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
               {messages.map((msg, i) => (
                 <button
                   key={i}
                   onClick={() => handleCopy(msg, i)}
-                  className="rounded-xl border-2 border-amber-200 bg-white p-4 text-left text-base leading-relaxed text-gray-800 transition-all hover:border-amber-400 hover:shadow-sm active:bg-amber-50"
+                  className={`rounded-xl border-2 p-3.5 text-left text-sm leading-relaxed transition-all active:scale-[0.98] sm:p-4 sm:text-base ${
+                    copiedIndex === i
+                      ? "border-green-400 bg-green-50 text-green-800"
+                      : "border-amber-200 bg-white text-gray-800"
+                  }`}
                 >
                   <span>{msg}</span>
-                  <span className="mt-2 block text-right text-xs text-amber-500">
+                  <span
+                    className={`mt-2 block text-right text-xs ${
+                      copiedIndex === i ? "text-green-500 font-medium" : "text-amber-400"
+                    }`}
+                  >
                     {copiedIndex === i ? "コピーしました!" : `${msg.length}文字`}
                   </span>
                 </button>
