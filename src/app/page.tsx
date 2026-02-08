@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   async function handleGenerate() {
-    if (!selectedChild || !keywords.trim()) return;
+    if (!selectedChild) return;
     setLoading(true);
     setMessages([]);
     setCopiedIndex(null);
@@ -109,7 +109,7 @@ export default function Home() {
             id="keywords"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
-            placeholder={"例: 公園で遊んだ、ご飯よく食べた\n夜ぐっすり寝た"}
+            placeholder={"例: 公園で遊んだ、ご飯よく食べた\n空欄ならおまかせで生成します"}
             rows={3}
             className="w-full rounded-xl border-2 border-amber-200 bg-white p-3.5 text-base leading-relaxed text-gray-800 placeholder:text-amber-300 focus:border-amber-500 focus:outline-none sm:p-4"
           />
@@ -118,7 +118,7 @@ export default function Home() {
         {/* Generate Button */}
         <button
           onClick={handleGenerate}
-          disabled={loading || !keywords.trim()}
+          disabled={loading}
           className="mb-6 w-full rounded-xl bg-amber-600 py-4 text-base font-bold text-white shadow-md transition-all active:scale-[0.98] disabled:bg-amber-300 disabled:cursor-not-allowed sm:text-lg"
         >
           {loading ? (

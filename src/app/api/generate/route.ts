@@ -21,9 +21,9 @@ export async function POST(request: NextRequest) {
   try {
     const { childId, keywords } = await request.json();
 
-    if (!childId || !keywords) {
+    if (!childId) {
       return NextResponse.json(
-        { error: "childIdとkeywordsは必須です" },
+        { error: "childIdは必須です" },
         { status: 400 }
       );
     }
@@ -44,8 +44,13 @@ export async function POST(request: NextRequest) {
 
     const age = calculateAge(child.birth_date);
 
+    const hasKeywords = keywords && keywords.trim();
+    const keywordSection = hasKeywords
+      ? `【キーワード】\n${keywords}`
+      : `【キーワード】\nなし（自由に日常のよくあるエピソードを考えて生成してください。食事、遊び、睡眠、兄弟のやりとり、成長を感じた場面など、バリエーション豊かにしてください）`;
+
     const prompt = `あなたは保育園の連絡帳を書くアシスタントです。
-以下の子供の情報とキーワードをもとに、保護者が保育園に提出する連絡帳の「家庭での様子」欄に書く文章を5パターン生成してください。
+以下の子供の情報をもとに、保護者が保育園に提出する連絡帳の「家庭での様子」欄に書く文章を5パターン生成してください。
 
 【子供の情報】
 名前: ${child.name}（${child.name_reading}）
@@ -54,8 +59,7 @@ ${child.birth_order}
 性格: ${child.personality || "特になし"}
 備考: ${child.notes || "特になし"}
 
-【キーワード】
-${keywords}
+${keywordSection}
 
 【条件】
 - 各パターン120〜140文字程度
